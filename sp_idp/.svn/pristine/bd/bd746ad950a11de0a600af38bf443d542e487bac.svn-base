@@ -1,0 +1,152 @@
+/*
+*Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*
+*WSO2 Inc. licenses this file to you under the Apache License,
+*Version 2.0 (the "License"); you may not use this file except
+*in compliance with the License.
+*You may obtain a copy of the License at
+*
+*http://www.apache.org/licenses/LICENSE-2.0
+*
+*Unless required by applicable law or agreed to in writing,
+*software distributed under the License is distributed on an
+*"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+*KIND, either express or implied.  See the License for the
+*specific language governing permissions and limitations
+*under the License.
+*/
+
+package org.wso2.carbon;
+
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.bean.SPBean;
+import org.wso2.carbon.identity.application.common.model.xsd.InboundAuthenticationRequestConfig;
+import org.wso2.carbon.identity.application.common.model.xsd.Property;
+import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
+import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceIdentityApplicationManagementException;
+import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceStub;
+import org.wso2.carbon.identity.oauth.stub.OAuthAdminServiceException;
+import org.wso2.carbon.identity.oauth.stub.OAuthAdminServiceStub;
+import org.wso2.carbon.identity.oauth.stub.dto.OAuthConsumerAppDTO;
+import org.wso2.carbon.util.AuthenticateStubUtil;
+
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Client class for adding oauth configurations by calling service stubs
+ */
+public class AddOauthConfigClient {
+    private static final Log log = LogFactory.getLog(AddOauthConfigClient.class);
+    private OAuthAdminServiceStub oAuthAdminServiceStub;
+    public IdentityApplicationManagementServiceStub idpAppMgtStub;
+    private final String idpAppMgtServiceName = "IdentityApplicationManagementService";
+    private final String serviceName = "OAuthAdminService";
+
+    public AddOauthConfigClient(String backendUrl, String sessionCookie) throws Exception {
+        String endPoint = backendUrl + serviceName;
+        oAuthAdminServiceStub = new OAuthAdminServiceStub(endPoint);
+        String idpAppMgtEndPoint = backendUrl + idpAppMgtServiceName;
+        idpAppMgtStub = new IdentityApplicationManagementServiceStub(idpAppMgtEndPoint);
+
+
+        AuthenticateStubUtil.authenticateStub(sessionCookie, oAuthAdminServiceStub);
+        AuthenticateStubUtil.authenticateStub(sessionCookie, idpAppMgtStub);
+    }
+
+    public AddOauthConfigClient(String backendUrl, String userName, String password) throws Exception {
+        String endPoint = backendUrl + serviceName;
+        oAuthAdminServiceStub = new OAuthAdminServiceStub(endPoint);
+        AuthenticateStubUtil.authenticateStub(userName, password, oAuthAdminServiceStub);
+    }
+
+    /**
+     * Add oauth2 configuration and bind the configuration with service provider
+     * @param spBean
+     */
+    public void addOauth2Config(SPBean spBean) {
+        String spName = spBean.getApplicationName();
+
+        if(spBean.getoAuthConsumerAppDTO() != null){
+
+            try {
+                oAuthAdminServiceStub.registerOAuthApplicationData(spBean.getoAuthConsumerAppDTO());
+            } catch (RemoteException e) {
+                System.out.println(e.getMessage());
+            } catch (OAuthAdminServiceException e) {
+                System.out.println(e.getMessage());
+            }
+
+            OAuthConsumerAppDTO consumerAppDTO = null;
+            try {
+                consumerAppDTO = oAuthAdminServiceStub.getOAuthApplicationDataByAppName(spName);
+            } catch (RemoteException e) {
+                System.out.println(e.getMessage());
+            } catch (OAuthAdminServiceException e) {
+                System.out.println(e.getMessage());
+            }
+            if(consumerAppDTO != null){
+                List<InboundAuthenticationRequestConfig> authRequestList = getAuthRequestList(consumerAppDTO, spBean);
+
+
+                ServiceProvider serviceProvider = null;
+                try {
+                    serviceProvider = idpAppMgtStub.getApplication(spName);
+                } catch (RemoteException e) {
+                    System.out.println(e.getMessage());
+                } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
+                    System.out.println(e.getMessage());
+                }
+                serviceProvider.getInboundAuthenticationConfig()
+                        .setInboundAuthenticationRequestConfigs(
+                                authRequestList
+                                        .toArray(new InboundAuthenticationRequestConfig[authRequestList
+                                                .size()]));
+                try {
+                    idpAppMgtStub.updateApplication(serviceProvider);
+                } catch (RemoteException e) {
+                    System.out.println(e.getMessage());
+                } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+
+        }
+
+    }
+
+    /**
+     * Retrieve and returns inbound authentication request configuration data from SPBean and consumerAppDTO
+     * @param consumerAppDTO
+     * @param spBean
+     * @return
+     */
+    private  List<InboundAuthenticationRequestConfig> getAuthRequestList(OAuthConsumerAppDTO consumerAppDTO, SPBean spBean){
+        List<InboundAuthenticationRequestConfig> authRequestList = new ArrayList<InboundAuthenticationRequestConfig>();
+        List<InboundAuthenticationRequestConfig> authRequestBeanList = spBean.getInboundAuthenticationRequestConfigs();
+        for (InboundAuthenticationRequestConfig inboundAuthReqConfig: authRequestBeanList){
+            if (consumerAppDTO.getOauthConsumerKey() != null) {
+                InboundAuthenticationRequestConfig opicAuthenticationRequest = new InboundAuthenticationRequestConfig();
+                opicAuthenticationRequest.setInboundAuthKey(consumerAppDTO.getOauthConsumerKey());
+                opicAuthenticationRequest.setInboundAuthType(inboundAuthReqConfig.getInboundAuthType());
+
+                for(Property prop : inboundAuthReqConfig.getProperties()){
+                    if (consumerAppDTO.getOauthConsumerSecret() != null && !consumerAppDTO.getOauthConsumerSecret().isEmpty()) {
+                        Property property = new Property();
+                        property.setName(prop.getName());
+                        property.setValue(consumerAppDTO.getOauthConsumerSecret() );
+                        Property[] properties = { property };
+                        opicAuthenticationRequest.setProperties(properties);
+                    }
+                }
+                authRequestList.add(opicAuthenticationRequest);
+            }
+
+        }
+        return authRequestList;
+    }
+
+}

@@ -1,0 +1,7 @@
+1. To add the Identity providers, go to idp folder and configure identity provider configuration in identity-provider.xml
+   and run the IDPAutomate.sh file.
+2. To add the Service providers go to sp folder and configure service provider configuration in service-provider.xml
+   and run the IDPAutomate.sh file.
+
+All the necessary paths will read from setup.conf file that resides in deployment directory.
+You can customize the public certificate path, key store file path, host name, admin user, password etc.. from that file(setup.conf)

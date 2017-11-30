@@ -1,0 +1,10 @@
+LOG=/tmp/script.log
+if [ "$1" = "local" ]; then
+  echo "Configs added by local system">>$LOG
+  . ../../../../setup.conf
+else
+  echo "Config added by docker runtime">>$LOG
+fi
+JKS_FILE_LOCATION="../../../../setup/is/wso2is-5.0.0/repository/resources/security/$VERIFONE_KEYSTORE.jks"
+echo "JKS location $JKS_FILE_LOCATION">>$LOG
+java -jar idpAndSPAutomate-1.0-SNAPSHOT-jar-with-dependencies.jar $ADMIN_USER $ADMIN_PASSWORD $IS_HOST_NAME https://$IS_HOST_NAME:$IS_HTTPS_PORT/services/ ../../resources/adfs.prod.crt $JKS_FILE_LOCATION identity-provider.xml

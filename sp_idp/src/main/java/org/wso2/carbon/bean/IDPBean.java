@@ -1,0 +1,186 @@
+/*
+*Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*
+*WSO2 Inc. licenses this file to you under the Apache License,
+*Version 2.0 (the "License"); you may not use this file except
+*in compliance with the License.
+*You may obtain a copy of the License at
+*
+*http://www.apache.org/licenses/LICENSE-2.0
+*
+*Unless required by applicable law or agreed to in writing,
+*software distributed under the License is distributed on an
+*"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+*KIND, either express or implied.  See the License for the
+*specific language governing permissions and limitations
+*under the License.
+*/
+
+package org.wso2.carbon.bean;
+
+
+import org.wso2.carbon.identity.application.common.model.idp.xsd.PermissionsAndRoleConfig;
+import org.wso2.carbon.identity.application.common.model.idp.xsd.ClaimConfig;
+import org.wso2.carbon.identity.application.common.model.idp.xsd.FederatedAuthenticatorConfig;
+import org.wso2.carbon.identity.application.common.model.idp.xsd.JustInTimeProvisioningConfig;
+import org.wso2.carbon.identity.application.common.model.idp.xsd.ProvisioningConnectorConfig;
+
+/**
+ * Bean class to hold Identity Provider data
+ */
+public class IDPBean {
+
+    private String identityProviderName;
+    private String displayName;
+    private String identityProviderDescription;
+    private boolean enable;
+    private String alias;
+    private String isPrimary;
+    private String isFederationHub;
+    private String homeRealmId;
+    private String provisioningRole;
+    private FederatedAuthenticatorConfig federatedAuthenticatorConfig;
+    private ProvisioningConnectorConfig provisioningConnectorConfig;
+    private String defaultAuthenticatorConfig;
+    private String defaultProvisioningConnectorConfig;
+    private ClaimConfig claimConfig;
+    private String certificate;
+    private PermissionsAndRoleConfig permissionAndRoleConfig;
+    private JustInTimeProvisioningConfig justInTimeProvisioningConfig;
+
+    public String getIdentityProviderName() {
+        return identityProviderName;
+    }
+
+    public void setIdentityProviderName(String identityProviderName) {
+        this.identityProviderName = identityProviderName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getIdentityProviderDescription() {
+        return identityProviderDescription;
+    }
+
+public boolean getenable()
+  {
+      return enable;
+  }
+
+
+ public void setenable(Boolean enable){ this.enable = enable; }
+
+    public void setIdentityProviderDescription(String identityProviderDescription) {
+        this.identityProviderDescription = identityProviderDescription;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getIsPrimary() {
+        return isPrimary;
+    }
+
+    public void setIsPrimary(String isPrimary) {
+        this.isPrimary = isPrimary;
+    }
+
+    public String getIsFederationHub() {
+        return isFederationHub;
+    }
+
+    public void setIsFederationHub(String isFederationHub) {
+        this.isFederationHub = isFederationHub;
+    }
+
+    public String getHomeRealmId() {
+        return homeRealmId;
+    }
+
+    public void setHomeRealmId(String homeRealmId) {
+        this.homeRealmId = homeRealmId;
+    }
+
+    public String getProvisioningRole() {
+        return provisioningRole;
+    }
+
+    public void setProvisioningRole(String provisioningRole) {
+        this.provisioningRole = provisioningRole;
+    }
+
+    public String getDefaultAuthenticatorConfig() {
+        return defaultAuthenticatorConfig;
+    }
+
+    public void setDefaultAuthenticatorConfig(String defaultAuthenticatorConfig) {
+        this.defaultAuthenticatorConfig = defaultAuthenticatorConfig;
+    }
+
+    public String getDefaultProvisioningConnectorConfig() {
+        return defaultProvisioningConnectorConfig;
+    }
+
+    public void setDefaultProvisioningConnectorConfig(String defaultProvisioningConnectorConfig) {
+        this.defaultProvisioningConnectorConfig = defaultProvisioningConnectorConfig;
+    }
+
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
+    }
+
+    public PermissionsAndRoleConfig getPermissionAndRoleConfig() {
+        return permissionAndRoleConfig;
+    }
+
+    public void setPermissionAndRoleConfig(PermissionsAndRoleConfig permissionAndRoleConfig) {
+        this.permissionAndRoleConfig = permissionAndRoleConfig;
+    }
+
+    public JustInTimeProvisioningConfig getJustInTimeProvisioningConfig() {
+        return justInTimeProvisioningConfig;
+    }
+
+    public void setJustInTimeProvisioningConfig(JustInTimeProvisioningConfig justInTimeProvisioningConfig) {
+        this.justInTimeProvisioningConfig = justInTimeProvisioningConfig;
+    }
+
+    public FederatedAuthenticatorConfig getFederatedAuthenticatorConfig() {
+        return federatedAuthenticatorConfig;
+    }
+
+    public void setFederatedAuthenticatorConfig(FederatedAuthenticatorConfig federatedAuthenticatorConfig) {
+        this.federatedAuthenticatorConfig = federatedAuthenticatorConfig;
+    }
+
+    public ClaimConfig getClaimConfig() {
+        return claimConfig;
+    }
+
+    public void setClaimConfig(ClaimConfig claimConfig) {
+        this.claimConfig = claimConfig;
+    }
+
+    public ProvisioningConnectorConfig getProvisioningConnectorConfig() {
+        return provisioningConnectorConfig;
+    }
+
+    public void setProvisioningConnectorConfig(ProvisioningConnectorConfig provisioningConnectorConfig) {
+        this.provisioningConnectorConfig = provisioningConnectorConfig;
+    }
+}
