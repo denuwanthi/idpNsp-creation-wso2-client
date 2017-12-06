@@ -4,7 +4,7 @@
         <DisplayName></DisplayName>
         <IdentityProviderDescription></IdentityProviderDescription>
         <enable>true</enable>
-        <Alias>https://dev5.account.verifone.com:9443/oauth2/token/</Alias>
+        <Alias>https://dev5.com:9443/oauth2/token/</Alias>
         <IsPrimary></IsPrimary>
         <IsFederationHub></IsFederationHub>
         <HomeRealmId></HomeRealmId>
