@@ -1,10 +1,10 @@
 <IdentityProviders>
     <IdentityProvider>
-        <IdentityProviderName>MyIDPTarvis</IdentityProviderName>
-        <DisplayName>MyIDPTarvis</DisplayName>
+        <IdentityProviderName>MyIDP</IdentityProviderName>
+        <DisplayName>MyIDP</DisplayName>
         <IdentityProviderDescription>idp for the travis</IdentityProviderDescription>
         <enable>true</enable>
-        <Alias>https://dev5.account.verifone.com:9443/oauth2/token</Alias>
+        <Alias>https://dev.com:9443/oauth2/token</Alias>
         <IsPrimary></IsPrimary>
         <IsFederationHub></IsFederationHub>
         <HomeRealmId></HomeRealmId>
