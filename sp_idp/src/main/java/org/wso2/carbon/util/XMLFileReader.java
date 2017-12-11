@@ -21,6 +21,7 @@ package org.wso2.carbon.util;
 
 //import org.apache.commons.codec.binary.Base64;
 import org.apache.catalina.mbeans.RoleMBean;
+import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -404,11 +405,12 @@ public class XMLFileReader {
 
                                     NodeList valueList = provisioningConnectorPropertyElement.getElementsByTagName("value");
 
-
-                                    Property provisioningConnectorProperty = new Property();
-                                    provisioningConnectorProperty.setName(namesList.item(0).getTextContent());
-                                    provisioningConnectorProperty.setValue(valueList.item(0).getTextContent());
-                                    provConnectorPropertyList[l] = provisioningConnectorProperty;
+                                    if (StringUtils.isNotBlank(valueList.item(0).getTextContent())) {
+                                        Property provisioningConnectorProperty = new Property();
+                                        provisioningConnectorProperty.setName(namesList.item(0).getTextContent());
+                                        provisioningConnectorProperty.setValue(valueList.item(0).getTextContent());
+                                        provConnectorPropertyList[l] = provisioningConnectorProperty;
+                                    }
 
                                 }
                             }
